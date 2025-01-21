@@ -29,10 +29,112 @@
 meta[name="viewport"] {
     content: width=1200; /* ビューポートの幅を固定 */
 }
+
+     .ad-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .ad-container {
+            position: absolute;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            pointer-events: auto;
+        }
+
+        .ad-close {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 20px;
+            height: 20px;
+            background: red;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .ad-image {
+            max-width: 300px;
+            max-height: 250px;
+            display: block;
+        }
      </style>
 </head>
 
 <body>
+   
+    <script>
+        // 広告の設定
+        const adImages = [
+            'images/ad1.jpg',
+            'images/ad2.gif',
+            'images/ad3.jpg',
+            // 必要な数だけ画像パスを追加
+        ];
+
+        // ランダムな位置を生成する関数
+        function getRandomPosition(maxWidth, maxHeight) {
+            return {
+                x: Math.random() * (maxWidth - 320),
+                y: Math.random() * (maxHeight - 270)
+            };
+        }
+
+        // 広告を作成する関数
+        function createAd(imageSrc) {
+            const position = getRandomPosition(window.innerWidth, window.innerHeight);
+            
+            const adOverlay = document.createElement('div');
+            adOverlay.className = 'ad-overlay';
+            
+            const adContainer = document.createElement('div');
+            adContainer.className = 'ad-container';
+            adContainer.style.left = position.x + 'px';
+            adContainer.style.top = position.y + 'px';
+            
+            const closeButton = document.createElement('div');
+            closeButton.className = 'ad-close';
+            closeButton.innerHTML = '×';
+            closeButton.onclick = function() {
+                adOverlay.remove();
+            };
+            
+            const image = document.createElement('img');
+            image.className = 'ad-image';
+            image.src = imageSrc;
+            
+            adContainer.appendChild(closeButton);
+            adContainer.appendChild(image);
+            adOverlay.appendChild(adContainer);
+            document.body.appendChild(adOverlay);
+        }
+
+        // ページ読み込み時に広告を表示
+        window.onload = function() {
+            // 各広告画像に対して
+            adImages.forEach((imageSrc, index) => {
+                // 少し遅延を付けて順番に表示
+                setTimeout(() => {
+                    createAd(imageSrc);
+                }, index * 500); // 500ミリ秒ごとに表示
+            });
+        };
+    </script>
 <!-- サイドバー -->
 <div class="sidebar">
 </div>
