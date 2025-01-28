@@ -94,41 +94,17 @@
         <a href="manager.html">管理人</a>
     </header>
     <h1>くーやの最新YouTube動画</h1>
-    <div class="video-list" id="videoList"></div>
-    <script>
-        const PLAYLIST_URL = 'https://youtube.com/playlist?list=PLYuVAa-oGGp8gVsAYxVgHRfotj_R-rEdr';
-
-        async function fetchVideos() {
-            try {
-                const response = await fetch(PLAYLIST_URL);
-                const html = await response.text();
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                
-                const videoItems = doc.querySelectorAll('ytd-playlist-video-renderer');
-                const videoList = document.getElementById('videoList');
-
-                videoItems.forEach(item => {
-                    const videoId = item.getAttribute('data-video-id');
-                    const videoTitle = item.querySelector('#video-title').textContent.trim();
-                    const thumbnail = item.querySelector('#img').src;
-
-                    const videoItem = document.createElement('div');
-                    videoItem.classList.add('video-item');
-                    videoItem.innerHTML = `
-                        <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank">
-                            <img src="${thumbnail}" alt="${videoTitle}">
-                            ${videoTitle}
-                        </a>
-                    `;
-                    videoList.appendChild(videoItem);
-                });
-            } catch (error) {
-                console.error('動画の取得に失敗しました:', error);
-            }
-        }
-
-        fetchVideos();
-    </script>
+   
+            <div class="video-container" style="display: flex; justify-content: center; padding: 20px;">
+        <iframe 
+            width="1000" 
+            height="800" 
+            src="https://www.youtube.com/embed/videoseries?list=PLYuVAa-oGGp8gVsAYxVgHRfotj_R-rEdr" 
+            title="YouTube video player" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+        </iframe>
+    </div>
 </body>
 </html>
