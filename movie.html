@@ -131,5 +131,41 @@
 
         fetchRSS();
     </script>
+
+    <script>
+        const PLAYLIST_URL = 'https://youtube.com/playlist?list=PLYuVAa-oGGp8gVsAYxVgHRfotj_R-rEdr';
+
+        async function fetchVideos() {
+            try {
+                const response = await fetch(PLAYLIST_URL);
+                const html = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                
+                const videoItems = doc.querySelectorAll('ytd-playlist-video-renderer');
+                const videoList = document.getElementById('videoList');
+
+                videoItems.forEach(item => {
+                    const videoId = item.getAttribute('data-video-id');
+                    const videoTitle = item.querySelector('#video-title').textContent.trim();
+                    const thumbnail = item.querySelector('#img').src;
+
+                    const videoItem = document.createElement('div');
+                    videoItem.classList.add('video-item');
+                    videoItem.innerHTML = `
+                        <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank">
+                            <img src="${thumbnail}" alt="${videoTitle}">
+                            ${videoTitle}
+                        </a>
+                    `;
+                    videoList.appendChild(videoItem);
+                });
+            } catch (error) {
+                console.error('動画の取得に失敗しました:', error);
+            }
+        }
+
+        fetchVideos();
+    </script>
 </body>
 </html>
